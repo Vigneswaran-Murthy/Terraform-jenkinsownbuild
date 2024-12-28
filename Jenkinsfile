@@ -15,11 +15,8 @@ pipeline {
         stage('Checkout') {
             steps {
                 script {
-                    dir("terraform") {
-                        // Clone the repository
-                        git "https://github.com/Vigneswaran-Murthy/Terraform-jenkinsownbuild.git"
-                        
-                    }
+                    // Clone the repository into the default workspace
+                    git "https://github.com/Vigneswaran-Murthy/Terraform-jenkinsownbuild.git"
                 }
             }
         }
@@ -28,12 +25,12 @@ pipeline {
         stage('Plan') {
             steps {
                 script {
-                    // Change directory to the terraform folder and initialize terraform
-                    sh 'pwd; cd terraform/; terraform init'
+                    // Initialize Terraform in the working directory
+                    sh 'pwd; terraform init'
                     // Generate the terraform plan and output it to a file
-                    sh 'pwd; cd terraform/; terraform plan -out=tfplan'
+                    sh 'terraform plan -out=tfplan'
                     // Show the plan content and save it to a file for review
-                    sh 'pwd; cd terraform/; terraform show -no-color tfplan > tfplan.txt'
+                    sh 'terraform show -no-color tfplan > tfplan.txt'
                 }
             }
         }
@@ -48,7 +45,7 @@ pipeline {
             steps {
                 script {
                     // Read the terraform plan content
-                    def plan = readFile 'terraform/tfplan.txt'
+                    def plan = readFile 'tfplan.txt'
                     // Request approval from the user before applying
                     input message: "Do you want to apply the plan?", 
                           parameters: [text(name: 'Plan', description: 'Please review the plan', defaultValue: plan)]
@@ -60,10 +57,6 @@ pipeline {
         stage('Apply') {
             steps {
                 script {
-                    // Apply the Terraform plan if autoApprove is false, or after manual approval
-                    sh 'pwd; cd terraform/; terraform apply -auto-approve tfplan'
-                }
-            }
-        }
-    }
-}
+                    // Apply the Terraform plan (use auto-approve if parameter is true)
+                    if (params.autoApprove) {
+                        sh 'terra
