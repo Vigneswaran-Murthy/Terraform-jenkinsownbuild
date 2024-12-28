@@ -17,7 +17,8 @@ pipeline {
                 script {
                     dir("terraform") {
                         // Clone the repository
-                        git "https://github.com/Vigneswaran-Murthy/Terraform-Jenkins-A-monk.git"
+                        git "https://github.com/Vigneswaran-Murthy/Terraform-jenkinsownbuild.git"
+                        
                     }
                 }
             }
