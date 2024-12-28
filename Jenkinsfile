@@ -59,4 +59,12 @@ pipeline {
                 script {
                     // Apply the Terraform plan (use auto-approve if parameter is true)
                     if (params.autoApprove) {
-                        sh 'terra
+                        sh 'terraform apply -auto-approve tfplan'
+                    } else {
+                        sh 'terraform apply tfplan'
+                    }
+                }
+            }
+        }
+    }
+}
