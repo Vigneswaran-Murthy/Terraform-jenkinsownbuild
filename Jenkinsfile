@@ -16,7 +16,8 @@ pipeline {
             steps {
                 script {
                     // Clone the repository into the default workspace
-                    git "https://github.com/Vigneswaran-Murthy/Terraform-jenkinsownbuild.git"
+                    git branch: 'main', url: 'https://github.com/Vigneswaran-Murthy/Terraform-jenkinsownbuild.git'
+
                 }
             }
         }
